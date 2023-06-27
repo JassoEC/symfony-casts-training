@@ -31,6 +31,7 @@ class Answer
     #[ORM\Column]
     private int $votes = 0;
 
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,5 +90,10 @@ class Answer
         $this->votes = $votes;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getId();
     }
 }

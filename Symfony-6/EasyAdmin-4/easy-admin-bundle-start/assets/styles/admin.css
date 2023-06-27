@@ -1,3 +1,7 @@
 :root {
-    --sidebar-bg: var(--gray-50)
+    --sidebar-bg: '#deebff';
+}
+
+.main-content {
+    margin-bottom: 100px;
 }
