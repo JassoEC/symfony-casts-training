@@ -49,6 +49,14 @@ class DashboardController extends AbstractDashboardController
             ->setTitle('Admin Panel')
             ->disableDarkMode();
     }
+    public function configureCrud(): Crud
+    {
+        return parent::configureCrud()
+            ->setDefaultSort([
+                'id' => 'DESC'
+            ]);
+    }
+
 
     public function configureUserMenu(UserInterface $user): UserMenu
     {
