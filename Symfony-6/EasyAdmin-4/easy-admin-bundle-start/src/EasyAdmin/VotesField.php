@@ -17,7 +17,7 @@ class VotesField implements FieldInterface
             ->setProperty($propertyName)
             ->setLabel($label)
             ->setTemplatePath('admin/field/votes.html.twig')
-            ->setFormType(IntegerType::class)
+            //->setFormType(IntegerType::class)
             ->addCssClass('field-integer')
             ->setDefaultColumns('col-md-4 col-xxl-3');
     }
