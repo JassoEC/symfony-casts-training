@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\EasyAdmin\VotesField;
 use App\Entity\Question;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -34,7 +35,7 @@ class QuestionCrudController extends AbstractCrudController
         yield TextareaField::new('question')
             ->hideOnIndex();
 
-        yield Field::new('votes')
+        yield VotesField::new('votes')
             ->setLabel('Total Votes')
             ->setTextAlign('right');
 
