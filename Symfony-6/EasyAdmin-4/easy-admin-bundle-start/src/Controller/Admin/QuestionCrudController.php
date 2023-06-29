@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 
 use App\EasyAdmin\VotesField;
 use App\Entity\Question;
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -62,6 +64,9 @@ class QuestionCrudController extends AbstractCrudController
 
         yield Field::new('createdAt')
             ->hideOnForm();
+
+        yield AssociationField::new('updatedBy')
+            ->onlyOnDetail();
     }
 
     public function configureCrud(Crud $crud): Crud
@@ -80,9 +85,9 @@ class QuestionCrudController extends AbstractCrudController
             ->setPermission(Action::DETAIL, 'ROLE_MODERATOR')
             ->setPermission(Action::EDIT, 'ROLE_MODERATOR')
 
-            ->setPermission(Action::NEW, 'ROLE_SUPERAMIN')
-            ->setPermission(Action::DELETE, 'ROLE_SUPERAMIN')
-            ->setPermission(Action::BATCH_DELETE, 'ROLE_SUPERAMIN');
+            ->setPermission(Action::NEW, 'ROLE_SUPER_ADMIN')
+            ->setPermission(Action::DELETE, 'ROLE_SUPER_ADMIN')
+            ->setPermission(Action::BATCH_DELETE, 'ROLE_SUPER_ADMIN');
     }
 
     public function configureFilters(Filters $filters): Filters
@@ -92,5 +97,17 @@ class QuestionCrudController extends AbstractCrudController
             ->add('votes')
             ->add('createdAt')
             ->add('name');
+    }
+
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw new \LogicException('The user must be an instance of ' . User::class);
+        }
+
+        $entityInstance->setUpdatedBy($user);
+
+        parent::updateEntity($entityManager, $entityInstance);
     }
 }
