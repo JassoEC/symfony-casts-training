@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\EasyAdmin\VotesField;
 use App\Entity\Answer;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
@@ -28,7 +29,9 @@ class AnswerCrudController extends AbstractCrudController
         yield VotesField::new('votes');
 
         yield AssociationField::new('question')
-            ->hideOnIndex();
+            ->hideOnIndex()
+            ->autocomplete()
+            ->setCrudController(QuestionCrudController::class);
 
         yield AssociationField::new('answeredBy');
 
@@ -37,5 +40,12 @@ class AnswerCrudController extends AbstractCrudController
 
         yield Field::new('updatedAt')
             ->onlyOnDetail();
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return parent::configureFilters($filters)
+            ->add('question')
+            ->add('answeredBy');
     }
 }
