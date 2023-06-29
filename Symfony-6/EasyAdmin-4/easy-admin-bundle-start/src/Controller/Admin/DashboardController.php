@@ -77,7 +77,8 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Questions', 'fas fa-question-circle', Question::class);
+        yield MenuItem::linkToCrud('Questions', 'fas fa-question-circle', Question::class)
+            ->setPermission('ROLE_MODERATOR');
         yield MenuItem::linkToCrud('Answers', 'fas fa-comments', Answer::class);
         yield MenuItem::linkToCrud('Topics', 'fa fa-folder', Topic::class);
         yield MenuItem::linkToCrud('Users', 'fa fa-users',  User::class);
@@ -93,7 +94,7 @@ class DashboardController extends AbstractDashboardController
     public function configureAssets(): Assets
     {
         return parent::configureAssets()
-            ->addWebpackEncoreEntry('app')
+            // ->addWebpackEncoreEntry('app')
             ->addWebpackEncoreEntry('admin');
     }
 
