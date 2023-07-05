@@ -47,7 +47,7 @@ class QuestionCrudController extends AbstractCrudController
         yield VotesField::new('votes')
             ->setLabel('Total Votes')
             ->setTextAlign('right')
-            ->setPermission('ROLE_SUPERAMIN');
+            ->setPermission('ROLE_SUPER_ADMIN');
 
         yield AssociationField::new('askedBy')
             ->autocomplete()
@@ -67,6 +67,8 @@ class QuestionCrudController extends AbstractCrudController
 
         yield AssociationField::new('updatedBy')
             ->onlyOnDetail();
+
+        yield Field::new('isApproved');
     }
 
     public function configureCrud(Crud $crud): Crud
@@ -81,6 +83,16 @@ class QuestionCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return parent::configureActions($actions)
+
+            ->update(Crud::PAGE_INDEX, Action::DELETE, function (Action $action) {
+                $action->displayIf(static function (Question $question) {
+                    //  return !$question->getIsApproved();
+                    return true;
+                });
+
+                return $action;
+            })
+
             ->setPermission(Action::INDEX, 'ROLE_MODERATOR')
             ->setPermission(Action::DETAIL, 'ROLE_MODERATOR')
             ->setPermission(Action::EDIT, 'ROLE_MODERATOR')
@@ -109,5 +121,18 @@ class QuestionCrudController extends AbstractCrudController
         $entityInstance->setUpdatedBy($user);
 
         parent::updateEntity($entityManager, $entityInstance);
+    }
+    /**
+     * @param Question $entityInstance
+     */
+
+    public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+
+        if ($entityInstance->getIsApproved()) {
+            throw new \LogicException('You cannot delete an approved question');
+        }
+
+        parent::deleteEntity($entityManager, $entityInstance);
     }
 }

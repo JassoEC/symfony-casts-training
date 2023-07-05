@@ -48,7 +48,7 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Admin Panel')
+            ->setTitle('Pirate StackOverflow')
             ->disableDarkMode();
     }
     public function configureCrud(): Crud
